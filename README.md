@@ -1,3 +1,3 @@
-# Ejemplos de Laboratorio de Estructuras de Datos 
+# Ejemplos de Laboratorio de Estructuras de Datos C
 
 ### Segundo Semestre 
