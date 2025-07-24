@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="/usr/bin/fpc" Date="1704440408"/>
+  <Params Value=" -MObjFPC -Scghi -Cg -O1 -gw3 -gl -l -vewnhibq -Fi/home/marcos/Documentos/EDD-C-2S2025/lib/x86_64-linux -Fu/home/marcos/Documentos/EDD-C-2S2025/ -FU/home/marcos/Documentos/EDD-C-2S2025/lib/x86_64-linux/ -FE/home/marcos/Documentos/EDD-C-2S2025/ -o/home/marcos/Documentos/EDD-C-2S2025/ejemplo ejemplo.lpr"/>
+</CONFIG>
