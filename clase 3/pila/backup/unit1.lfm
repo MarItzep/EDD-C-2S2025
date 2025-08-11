@@ -1,0 +1,61 @@
+object Form1: TForm1
+  Left = 798
+  Height = 574
+  Top = 296
+  Width = 516
+  Caption = 'Form1'
+  ClientHeight = 574
+  ClientWidth = 516
+  DesignTimePPI = 144
+  LCLVersion = '4.2.0.0'
+  object EditValor: TEdit
+    Left = 112
+    Height = 33
+    Top = 96
+    Width = 120
+    TabOrder = 0
+  end
+  object MemoPila: TMemo
+    Left = 104
+    Height = 184
+    Top = 160
+    Width = 320
+    Lines.Strings = (
+      'MemoPila'
+    )
+    TabOrder = 1
+  end
+  object ApilarBtn: TButton
+    Left = 311
+    Height = 38
+    Top = 40
+    Width = 113
+    Caption = 'ApilarBtn'
+    TabOrder = 2
+    OnClick = ApilarBtnClick
+  end
+  object DesapilarBtn: TButton
+    Left = 311
+    Height = 38
+    Top = 96
+    Width = 113
+    Caption = 'DesapilarBtn'
+    TabOrder = 3
+    OnClick = DesapilarBtnClick
+  end
+  object MostrarGraficaBtn: TButton
+    Left = 176
+    Height = 38
+    Top = 352
+    Width = 177
+    Caption = 'MostrarGraficaBtn'
+    TabOrder = 4
+    OnClick = MostrarGraficaBtnClick
+  end
+  object ImagePila: TImage
+    Left = 97
+    Height = 159
+    Top = 400
+    Width = 359
+  end
+end

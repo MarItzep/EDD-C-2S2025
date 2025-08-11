@@ -1,0 +1,9 @@
+digraph Pila {
+  rankdir=LR;
+  node [shape=record, style=filled, fillcolor=lightblue];
+  nil [shape=point];
+  "marcos@gmail.com" [label="marcos@gmail.com"];
+
+  "marcos@gmail.com" -> nil [style=dashed];
+
+}
