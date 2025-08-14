@@ -1,0 +1,44 @@
+digraph Bitacora {
+  graph [splines=ortho];
+  rankdir=TB;
+  node [shape=record, style=filled, fillcolor=white];
+  label = "Matriz Dispersa (Bitácora)";
+  nodeRoot [label="ROOT", shape=plaintext, fillcolor=yellow];
+  { rank=same; nodeRoot; colHeader_fm1; colHeader_gm1; colHeader_om1; }
+  colHeader_fm1 [label="fm1", shape=plaintext, fillcolor=lightblue];
+  colHeader_gm1 [label="gm1", shape=plaintext, fillcolor=lightblue];
+  colHeader_om1 [label="om1", shape=plaintext, fillcolor=lightblue];
+  rowHeader_dm1 [label="dm1", shape=plaintext, fillcolor=lightgreen];
+  rowHeader_jm1 [label="jm1", shape=plaintext, fillcolor=lightgreen];
+  rowHeader_sm1 [label="sm1", shape=plaintext, fillcolor=lightgreen];
+  nodeRoot -> colHeader_fm1 [color=black];
+  colHeader_fm1 -> nodeRoot [color=black];
+  nodeRoot -> rowHeader_dm1 [color=black];
+  rowHeader_dm1 -> nodeRoot [color=black];
+  colHeader_fm1 -> colHeader_gm1 [color=black];
+  colHeader_gm1 -> colHeader_fm1 [color=black];
+  colHeader_gm1 -> colHeader_om1 [color=black];
+  colHeader_om1 -> colHeader_gm1 [color=black];
+  rowHeader_dm1 -> rowHeader_jm1 [color=black];
+  rowHeader_jm1 -> rowHeader_dm1 [color=black];
+  rowHeader_jm1 -> rowHeader_sm1 [color=black];
+  rowHeader_sm1 -> rowHeader_jm1 [color=black];
+  { rank=same; rowHeader_dm1; f_dm1_c_gm1; }
+  { rank=same; rowHeader_jm1; f_jm1_c_om1; }
+  { rank=same; rowHeader_sm1; f_sm1_c_fm1; }
+  f_dm1_c_gm1 [label="3"];
+  rowHeader_dm1 -> f_dm1_c_gm1 [color=black];
+  f_dm1_c_gm1 -> rowHeader_dm1 [color=black];
+  colHeader_gm1 -> f_dm1_c_gm1 [color=black];
+  f_dm1_c_gm1 -> colHeader_gm1 [color=black];
+  f_jm1_c_om1 [label="2"];
+  rowHeader_jm1 -> f_jm1_c_om1 [color=black];
+  f_jm1_c_om1 -> rowHeader_jm1 [color=black];
+  colHeader_om1 -> f_jm1_c_om1 [color=black];
+  f_jm1_c_om1 -> colHeader_om1 [color=black];
+  f_sm1_c_fm1 [label="1"];
+  rowHeader_sm1 -> f_sm1_c_fm1 [color=black];
+  f_sm1_c_fm1 -> rowHeader_sm1 [color=black];
+  colHeader_fm1 -> f_sm1_c_fm1 [color=black];
+  f_sm1_c_fm1 -> colHeader_fm1 [color=black];
+}
