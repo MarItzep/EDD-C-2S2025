@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="C:\lazarus\fpc\3.2.2\bin\x86_64-win64\fpc.exe" Date="1525897257"/>
+  <Params Value="-MObjFPC -Scghi -O1 -gw3 -gl -l -vewnhibq &quot;-FiC:\Users\LENOVO\Documents\EDD_2S2025\EDD-C-2S2025\clase 5\Terminal\lib\x86_64-win64&quot; &quot;-FuC:\Users\LENOVO\Documents\EDD_2S2025\EDD-C-2S2025\clase 5\Terminal\&quot; &quot;-FUC:\Users\LENOVO\Documents\EDD_2S2025\EDD-C-2S2025\clase 5\Terminal\lib\x86_64-win64\&quot; &quot;-FEC:\Users\LENOVO\Documents\EDD_2S2025\EDD-C-2S2025\clase 5\Terminal\&quot; &quot;-oC:\Users\LENOVO\Documents\EDD_2S2025\EDD-C-2S2025\clase 5\Terminal\listadelistas.exe&quot; listadelistas.lpr"/>
+</CONFIG>

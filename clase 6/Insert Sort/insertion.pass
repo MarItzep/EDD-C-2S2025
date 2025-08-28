@@ -1,0 +1,116 @@
+program ListaEnlazadaPascal;
+
+
+uses
+  SysUtils;
+
+type
+  PNodo = ^TNodo;
+  TNodo = record
+    Id: Integer;
+    Nombres: string;
+    Apellidos: string;
+    Correo: string;
+    Edad: Integer;
+    Contrasenia: string;
+    Siguiente: PNodo; // puntero al siguiente nodo
+  end;
+
+var
+  cabeza: PNodo = nil;
+
+// Procedimiento para agregar un nodo al final de la lista
+procedure Agregar(id: Integer; nombres, apellidos, correo: string; edad: Integer; contrasenia: string);
+var
+  nuevo, actual: PNodo;
+begin
+  New(nuevo);
+  nuevo^.Id := id;
+  nuevo^.Nombres := nombres;
+  nuevo^.Apellidos := apellidos;
+  nuevo^.Correo := correo;
+  nuevo^.Edad := edad;
+  nuevo^.Contrasenia := contrasenia;
+  nuevo^.Siguiente := nil;
+
+  if cabeza = nil then
+    cabeza := nuevo
+  else
+  begin
+    actual := cabeza;
+    while actual^.Siguiente <> nil do
+      actual := actual^.Siguiente;
+    actual^.Siguiente := nuevo;
+  end;
+end;
+
+// InsertionSort para ordenar por Nombres (alfabéticamente)
+procedure InsertionSort;
+var
+  listaOrdenada, actual, siguiente, temp: PNodo;
+begin
+  if (cabeza = nil) or (cabeza^.Siguiente = nil) then
+    Exit;
+
+  listaOrdenada := nil;
+  actual := cabeza;
+
+  while actual <> nil do
+  begin
+    siguiente := actual^.Siguiente;
+
+    // Insertar al inicio si listaOrdenada está vacía o si va antes alfabéticamente
+    if (listaOrdenada = nil) or (CompareText(actual^.Nombres, listaOrdenada^.Nombres) < 0) then
+    begin
+      actual^.Siguiente := listaOrdenada;
+      listaOrdenada := actual;
+    end
+    else
+    begin
+      temp := listaOrdenada;
+      while (temp^.Siguiente <> nil) and (CompareText(temp^.Siguiente^.Nombres, actual^.Nombres) < 0) do
+        temp := temp^.Siguiente;
+
+      actual^.Siguiente := temp^.Siguiente;
+      temp^.Siguiente := actual;
+    end;
+
+    actual := siguiente;
+  end;
+
+  cabeza := listaOrdenada;
+end;
+
+// Imprimir toda la lista
+procedure Imprimir;
+var
+  actual: PNodo;
+begin
+  actual := cabeza;
+  while actual <> nil do
+  begin
+    WriteLn('ID: ', actual^.Id, ', Nombre: ', actual^.Nombres, ' ', actual^.Apellidos,
+            ', Edad: ', actual^.Edad);
+    actual := actual^.Siguiente;
+  end;
+end;
+
+begin
+  // Agregamos nodos a la lista
+  Agregar(1, 'Luiz', 'Gómez', 'luis@mail.com', 25, 'pass123');
+  Agregar(2, 'Guatemala', 'Pérez', 'guatemala@mail.com', 20, 'pass456');
+  Agregar(3, 'Estiven', 'Martínez', 'Estiven@mail.com', 99, 'pass789');
+  Agregar(4, 'Berta', 'García', 'Berta@gmail.com', 22, 'passabc');
+  Agregar(5, 'Alberto', 'Pernandez', 'Alberto@gmail.com', 10, 'passdef');
+
+  WriteLn('Lista antes de ordenar:');
+  Imprimir;
+
+  InsertionSort;
+
+  WriteLn;
+  WriteLn('Lista después de ordenar:');
+  Imprimir;
+
+  ReadLn;
+end.

@@ -1,0 +1,132 @@
+program ListaEnlazadaPascal;
+
+
+uses
+  SysUtils;
+
+type
+  PNodo = ^TNodo;
+  TNodo = record
+    Id: Integer;
+    Nombres: string;
+    Apellidos: string;
+    Correo: string;
+    Edad: Integer;
+    Contrasenia: string;
+    Siguiente: PNodo;
+  end;
+
+var
+  cabeza: PNodo = nil;
+
+// Agregar nodo al final
+procedure Agregar(id: Integer; nombres, apellidos, correo: string; edad: Integer; contrasenia: string);
+var
+  nuevo, actual: PNodo;
+begin
+  New(nuevo);
+  nuevo^.Id := id;
+  nuevo^.Nombres := nombres;
+  nuevo^.Apellidos := apellidos;
+  nuevo^.Correo := correo;
+  nuevo^.Edad := edad;
+  nuevo^.Contrasenia := contrasenia;
+  nuevo^.Siguiente := nil;
+
+  if cabeza = nil then
+    cabeza := nuevo
+  else
+  begin
+    actual := cabeza;
+    while actual^.Siguiente <> nil do
+      actual := actual^.Siguiente;
+    actual^.Siguiente := nuevo;
+  end;
+end;
+
+// SelectionSort por Apellido
+procedure SelectionSort;
+var
+  actual, minimo, siguiente: PNodo;
+  tempId, tempEdad: Integer;
+  tempNombres, tempApellidos, tempCorreo, tempContrasenia: string;
+begin
+  actual := cabeza;
+
+  while actual <> nil do
+  begin
+    minimo := actual;
+    siguiente := actual^.Siguiente;
+
+    while siguiente <> nil do
+    begin
+      if CompareText(siguiente^.Apellidos, minimo^.Apellidos) < 0 then
+        minimo := siguiente;
+      siguiente := siguiente^.Siguiente;
+    end;
+
+    if minimo <> actual then
+    begin
+      // Intercambiar datos
+      tempId := actual^.Id;
+      tempNombres := actual^.Nombres;
+      tempApellidos := actual^.Apellidos;
+      tempCorreo := actual^.Correo;
+      tempEdad := actual^.Edad;
+      tempContrasenia := actual^.Contrasenia;
+
+      actual^.Id := minimo^.Id;
+      actual^.Nombres := minimo^.Nombres;
+      actual^.Apellidos := minimo^.Apellidos;
+      actual^.Correo := minimo^.Correo;
+      actual^.Edad := minimo^.Edad;
+      actual^.Contrasenia := minimo^.Contrasenia;
+
+      minimo^.Id := tempId;
+      minimo^.Nombres := tempNombres;
+      minimo^.Apellidos := tempApellidos;
+      minimo^.Correo := tempCorreo;
+      minimo^.Edad := tempEdad;
+      minimo^.Contrasenia := tempContrasenia;
+    end;
+
+    actual := actual^.Siguiente;
+  end;
+end;
+
+// Imprimir lista
+procedure Imprimir;
+var
+  actual: PNodo;
+begin
+  actual := cabeza;
+  while actual <> nil do
+  begin
+    WriteLn('ID: ', actual^.Id, ', Nombre: ', actual^.Nombres, ' ', actual^.Apellidos,
+            ', Edad: ', actual^.Edad);
+    actual := actual^.Siguiente;
+  end;
+end;
+
+begin
+  // Agregar nodos
+  Agregar(1, 'Carlos', 'Gómez', 'carlos@mail.com', 25, 'pass123');
+  Agregar(2, 'Ana', 'Pérez', 'ana@mail.com', 20, 'pass456');
+  Agregar(3, 'Luis', 'Martínez', 'luis@mail.com', 99, 'pass789');
+  Agregar(4, 'María', 'García', 'maria@gmail.com', 22, 'passabc');
+  Agregar(5, 'Pedrito', 'Fernandez', 'pedrito@gmail.com', 10, 'passdef');
+  Agregar(6, 'Juan', 'Pernandez', 'juanpernandez@gmail.com', 18, 'passdef');
+  Agregar(7, 'Maria', 'Piox', 'Maria@gmail.com', 20, 'passdef');
+  Agregar(8, 'Pedrina', 'Garcia', 'pedrinagarcias@gmail.com', 20, 'passdef');
+
+  WriteLn('Lista antes de ordenar:');
+  Imprimir;
+
+  SelectionSort;
+
+  WriteLn;
+  WriteLn('Lista después de ordenar por apellidos:');
+  Imprimir;
+
+  ReadLn;
+end.

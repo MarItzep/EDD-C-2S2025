@@ -1,0 +1,146 @@
+program ListaEnlazadaPascal;
+
+
+
+uses
+  SysUtils;
+
+type
+  PNodo = ^TNodo;
+  TNodo = record
+    Id: Integer;
+    Nombres: string;
+    Apellidos: string;
+    Correo: string;
+    Edad: Integer;
+    Contrasenia: string;
+    Siguiente: PNodo; // Puntero al siguiente nodo
+  end;
+
+  TListaEnlazada = class
+  private
+    cabeza: PNodo;
+  public
+    constructor Create;
+    procedure Agregar(id: Integer; nombres, apellidos, correo: string; edad: Integer; contrasenia: string);
+    procedure BubbleSort;
+    procedure Imprimir;
+    procedure Imprimir2;
+  end;
+
+constructor TListaEnlazada.Create;
+begin
+  cabeza := nil;
+end;
+
+procedure TListaEnlazada.Agregar(id: Integer; nombres, apellidos, correo: string; edad: Integer; contrasenia: string);
+var
+  nuevo, actual: PNodo;
+begin
+  New(nuevo);
+  nuevo^.Id := id;
+  nuevo^.Nombres := nombres;
+  nuevo^.Apellidos := apellidos;
+  nuevo^.Correo := correo;
+  nuevo^.Edad := edad;
+  nuevo^.Contrasenia := contrasenia;
+  nuevo^.Siguiente := nil;
+
+  if cabeza = nil then
+    cabeza := nuevo
+  else
+  begin
+    actual := cabeza;
+    while actual^.Siguiente <> nil do
+      actual := actual^.Siguiente;
+    actual^.Siguiente := nuevo;
+  end;
+end;
+
+procedure TListaEnlazada.BubbleSort;
+var
+  intercambiado: Boolean;
+  actual, anterior, temp: PNodo;
+begin
+  if (cabeza = nil) or (cabeza^.Siguiente = nil) then
+    Exit;
+
+  repeat
+    intercambiado := False;
+    actual := cabeza;
+    anterior := nil;
+
+    while (actual <> nil) and (actual^.Siguiente <> nil) do
+    begin
+      if actual^.Edad > actual^.Siguiente^.Edad then
+      begin
+        temp := actual^.Siguiente;
+        actual^.Siguiente := temp^.Siguiente;
+        temp^.Siguiente := actual;
+
+        if anterior = nil then
+          cabeza := temp
+        else
+          anterior^.Siguiente := temp;
+
+        intercambiado := True;
+      end;
+
+      anterior := actual;
+      actual := actual^.Siguiente;
+    end;
+  until not intercambiado;
+end;
+
+procedure TListaEnlazada.Imprimir;
+var
+  actual: PNodo;
+begin
+  actual := cabeza;
+  while actual <> nil do
+  begin
+    WriteLn('ID: ', actual^.Id, ', Nombre: ', actual^.Nombres, ' ', actual^.Apellidos,
+            ', Edad: ', actual^.Edad);
+    actual := actual^.Siguiente;
+  end;
+end;
+
+procedure TListaEnlazada.Imprimir2;
+var
+  actual: PNodo;
+begin
+  actual := cabeza;
+  while actual <> nil do
+  begin
+    WriteLn('Nombre: ', actual^.Nombres, '  Edad: ', actual^.Edad);
+    actual := actual^.Siguiente;
+  end;
+end;
+
+var
+  lista: TListaEnlazada;
+
+begin
+  lista := TListaEnlazada.Create;
+
+  lista.Agregar(1, 'Carlos', 'Gómez', 'carlos@mail.com', 25, 'pass123');
+  lista.Agregar(3, 'Ana', 'Pérez', 'ana@mail.com', 20, 'pass456');
+  lista.Agregar(8, 'Luis', 'Martínez', 'luis@mail.com', 99, 'pass789');
+  lista.Agregar(7, 'María', 'García', 'maria@gmail.com', 22, 'passabc');
+  lista.Agregar(5, 'Pedrito', 'Pernandez', 'pedrito@gmail.com', 10, 'passdef');
+
+  WriteLn('Lista antes de ordenar:');
+  lista.Imprimir;
+
+  lista.BubbleSort;
+
+  WriteLn;
+  WriteLn('Lista después de ordenar:');
+  lista.Imprimir;
+
+  WriteLn;
+  WriteLn('Lista ordenada Nombres - Edades:');
+  lista.Imprimir2;
+
+  ReadLn;
+end.
