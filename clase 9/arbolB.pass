@@ -1,0 +1,389 @@
+program ArbolB;
+
+{$mode objfpc}{$H+}
+
+uses
+  Classes, SysUtils, Generics.Collections;
+
+type
+  // Clase que representa un elemento con Id y Asunto
+  TElemento = class
+  public
+    Id: Integer;
+    Asunto: string;
+
+    constructor Create(AId: Integer; AAsunto: string);
+  end;
+
+  // Forward declaration
+  TNodoArbolB = class;
+
+  // Lista de elementos y nodos
+  TListaElementos = specialize TList<TElemento>;
+  TListaNodos = specialize TList<TNodoArbolB>;
+
+  // Clase que representa un nodo en el árbol B
+  TNodoArbolB = class
+  private
+    const ORDEN = 5;
+    const MAX_CLAVES = ORDEN - 1;
+    const MIN_CLAVES = (ORDEN div 2) - 1;
+
+  public
+    Claves: TListaElementos;
+    Hijos: TListaNodos;
+    EsHoja: Boolean;
+
+    constructor Create;
+    destructor Destroy; override;
+
+    // Verifica si el nodo está lleno
+    function EstaLleno: Boolean;
+
+    // Verifica si el nodo tiene el mínimo de claves requerido
+    function TieneMinimoClaves: Boolean;
+  end;
+
+  TArbolB = class
+  private
+    Raiz: TNodoArbolB;
+    const ORDEN = 5;
+    const MAX_CLAVES = ORDEN - 1;
+    const MIN_CLAVES = (ORDEN div 2) - 1;
+
+    // Divide un hijo cuando está lleno durante la inserción
+    procedure DividirHijo(Padre: TNodoArbolB; IndiceHijo: Integer);
+
+    // Inserta un elemento en un nodo que no está lleno
+    procedure InsertarNoLleno(Nodo: TNodoArbolB; Elemento: TElemento);
+
+    // Método recursivo para búsqueda
+    function BuscarRecursivo(Nodo: TNodoArbolB; Id: Integer): TElemento;
+
+
+
+    // Método recursivo para generar Graphviz
+    procedure GraficarGraphvizRecursivo(Nodo: TNodoArbolB; var SB: TStringBuilder; var ContadorNodos: Integer);
+
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    // Método para insertar un nuevo elemento
+    procedure Insertar(Id: Integer; Asunto: string);
+
+    // Busca un elemento por su Id
+    function Buscar(Id: Integer): TElemento;
+
+    // Método para generar el archivo .dot para Graphviz
+    function GraficarGraphviz: string;
+  end;
+
+// Implementación de TElemento
+constructor TElemento.Create(AId: Integer; AAsunto: string);
+begin
+  Id := AId;
+  Asunto := AAsunto;
+end;
+
+// Implementación de TNodoArbolB
+constructor TNodoArbolB.Create;
+begin
+  inherited Create;
+  Claves := TListaElementos.Create;
+  Hijos := TListaNodos.Create;
+  EsHoja := True;
+end;
+
+destructor TNodoArbolB.Destroy;
+var
+  i: Integer;
+begin
+  // Liberar elementos
+  for i := 0 to Claves.Count - 1 do
+    Claves[i].Free;
+  Claves.Free;
+
+  // Liberar nodos hijos
+  for i := 0 to Hijos.Count - 1 do
+    Hijos[i].Free;
+  Hijos.Free;
+
+  inherited Destroy;
+end;
+
+function TNodoArbolB.EstaLleno: Boolean;
+begin
+  Result := Claves.Count >= MAX_CLAVES;
+end;
+
+function TNodoArbolB.TieneMinimoClaves: Boolean;
+begin
+  Result := Claves.Count >= MIN_CLAVES;
+end;
+
+// Implementación de TArbolB
+constructor TArbolB.Create;
+begin
+  inherited Create;
+  Raiz := TNodoArbolB.Create;
+end;
+
+destructor TArbolB.Destroy;
+begin
+  Raiz.Free;
+  inherited Destroy;
+end;
+
+procedure TArbolB.Insertar(Id: Integer; Asunto: string);
+var
+  NuevoElemento: TElemento;
+  NuevaRaiz: TNodoArbolB;
+begin
+  NuevoElemento := TElemento.Create(Id, Asunto);
+
+  // Si la raíz está llena, se crea una nueva raíz
+  if Raiz.EstaLleno then
+  begin
+    NuevaRaiz := TNodoArbolB.Create;
+    NuevaRaiz.EsHoja := False;
+    NuevaRaiz.Hijos.Add(Raiz);
+    DividirHijo(NuevaRaiz, 0);
+    Raiz := NuevaRaiz;
+  end;
+
+  InsertarNoLleno(Raiz, NuevoElemento);
+end;
+
+procedure TArbolB.DividirHijo(Padre: TNodoArbolB; IndiceHijo: Integer);
+var
+  HijoCompleto, NuevoHijo: TNodoArbolB;
+  ElementoMedio: TElemento;
+  i, j: Integer;
+begin
+  HijoCompleto := Padre.Hijos[IndiceHijo];
+  NuevoHijo := TNodoArbolB.Create;
+  NuevoHijo.EsHoja := HijoCompleto.EsHoja;
+
+  // Elemento del medio que se promoverá al padre
+  ElementoMedio := HijoCompleto.Claves[MIN_CLAVES];
+
+  // Mover la mitad de las claves al nuevo hijo
+  for i := MIN_CLAVES + 1 to MAX_CLAVES - 1 do
+  begin
+    NuevoHijo.Claves.Add(HijoCompleto.Claves[i]);
+  end;
+
+  // Si no es hoja, mover también los hijos correspondientes
+  if not HijoCompleto.EsHoja then
+  begin
+    for i := (ORDEN div 2) to ORDEN - 1 do
+    begin
+      NuevoHijo.Hijos.Add(HijoCompleto.Hijos[i]);
+    end;
+
+    // Eliminar los hijos movidos del hijo original
+    for i := HijoCompleto.Hijos.Count - 1 downto (ORDEN div 2) do
+      HijoCompleto.Hijos.Delete(i);
+  end;
+
+  // Eliminar las claves movidas del hijo original
+  for i := HijoCompleto.Claves.Count - 1 downto MIN_CLAVES do
+    HijoCompleto.Claves.Delete(i);
+
+  // Insertar el nuevo hijo en el padre
+  Padre.Hijos.Insert(IndiceHijo + 1, NuevoHijo);
+
+  // Insertar la clave media en el padre
+  j := 0;
+  while (j < Padre.Claves.Count) and (Padre.Claves[j].Id < ElementoMedio.Id) do
+    Inc(j);
+  Padre.Claves.Insert(j, ElementoMedio);
+end;
+
+procedure TArbolB.InsertarNoLleno(Nodo: TNodoArbolB; Elemento: TElemento);
+var
+  i: Integer;
+begin
+  i := Nodo.Claves.Count - 1;
+
+  // Si es hoja, simplemente inserta el elemento en orden
+  if Nodo.EsHoja then
+  begin
+    // Buscar la posición correcta para insertar
+    while (i >= 0) and (Elemento.Id < Nodo.Claves[i].Id) do
+      Dec(i);
+    Nodo.Claves.Insert(i + 1, Elemento);
+  end
+  else
+  begin
+    // Encuentra el hijo donde debe estar el elemento
+    while (i >= 0) and (Elemento.Id < Nodo.Claves[i].Id) do
+      Dec(i);
+    Inc(i);
+
+    // Si el hijo está lleno, divídelo primero
+    if Nodo.Hijos[i].EstaLleno then
+    begin
+      DividirHijo(Nodo, i);
+      if Elemento.Id > Nodo.Claves[i].Id then
+        Inc(i);
+    end;
+    InsertarNoLleno(Nodo.Hijos[i], Elemento);
+  end;
+end;
+
+function TArbolB.Buscar(Id: Integer): TElemento;
+begin
+  Result := BuscarRecursivo(Raiz, Id);
+end;
+
+function TArbolB.BuscarRecursivo(Nodo: TNodoArbolB; Id: Integer): TElemento;
+var
+  i: Integer;
+begin
+  i := 0;
+  // Buscar la primera clave mayor o igual que id
+  while (i < Nodo.Claves.Count) and (Id > Nodo.Claves[i].Id) do
+    Inc(i);
+
+  // Si encontramos el id, devolvemos el elemento
+  if (i < Nodo.Claves.Count) and (Id = Nodo.Claves[i].Id) then
+  begin
+    Result := Nodo.Claves[i];
+    Exit;
+  end;
+
+  // Si es una hoja y no encontramos el id, no existe
+  if Nodo.EsHoja then
+  begin
+    Result := nil;
+    Exit;
+  end;
+
+  // Si no es hoja, buscamos en el hijo correspondiente
+  Result := BuscarRecursivo(Nodo.Hijos[i], Id);
+end;
+
+
+
+
+
+function TArbolB.GraficarGraphviz: string;
+var
+  SB: TStringBuilder;
+  ContadorNodos: Integer;
+begin
+  SB := TStringBuilder.Create;
+  try
+    SB.AppendLine('digraph BTree {');
+    SB.AppendLine('    node [shape=record];');
+
+    ContadorNodos := 0;
+    GraficarGraphvizRecursivo(Raiz, SB, ContadorNodos);
+
+    SB.AppendLine('}');
+    WriteLn(SB.ToString);
+    Result := SB.ToString;
+  finally
+    SB.Free;
+  end;
+end;
+
+procedure TArbolB.GraficarGraphvizRecursivo(Nodo: TNodoArbolB; var SB: TStringBuilder; var ContadorNodos: Integer);
+var
+  NodoActual, HijoPosicion: Integer;
+  EtiquetaNodo: TStringBuilder;
+  i: Integer;
+begin
+  if Nodo = nil then
+    Exit;
+
+  NodoActual := ContadorNodos;
+  Inc(ContadorNodos);
+
+  // Construir la etiqueta del nodo
+  EtiquetaNodo := TStringBuilder.Create;
+  try
+    EtiquetaNodo.Append(Format('node%d [label="', [NodoActual]));
+
+    for i := 0 to Nodo.Claves.Count - 1 do
+    begin
+      if i > 0 then
+        EtiquetaNodo.Append('|');
+      EtiquetaNodo.Append(Format('<f%d> |Id: %d, Asunto: %s|', [i, Nodo.Claves[i].Id, Nodo.Claves[i].Asunto]));
+    end;
+
+    // Añadir un puerto más para el último hijo
+    if Nodo.Claves.Count > 0 then
+      EtiquetaNodo.Append(Format('<f%d>', [Nodo.Claves.Count]));
+
+    EtiquetaNodo.Append('"];');
+    SB.AppendLine(EtiquetaNodo.ToString);
+  finally
+    EtiquetaNodo.Free;
+  end;
+
+  // Graficar los hijos y sus conexiones
+  if not Nodo.EsHoja then
+  begin
+    for i := 0 to Nodo.Claves.Count do
+    begin
+      HijoPosicion := ContadorNodos;
+      GraficarGraphvizRecursivo(Nodo.Hijos[i], SB, ContadorNodos);
+      SB.AppendLine(Format('    node%d:f%d -> node%d;', [NodoActual, i, HijoPosicion]));
+    end;
+  end;
+end;
+
+// Programa principal
+var
+  Arbol: TArbolB;
+  Elemento: TElemento;
+
+begin
+  // Creamos una instancia del árbol B
+  Arbol := TArbolB.Create;
+  try
+    // Insertamos elementos
+    Arbol.Insertar(10, 'Reunión de proyecto');
+    Arbol.Insertar(5, 'Llamada con cliente');
+    Arbol.Insertar(15, 'Revisión de código');
+    Arbol.Insertar(7, 'Documentación técnica');
+    Arbol.Insertar(12, 'Pruebas unitarias');
+    Arbol.Insertar(21, 'Planificación semanal2');
+    Arbol.Insertar(23, 'Planificación semanal3');
+    Arbol.Insertar(28, 'Planificación semanal4');
+    Arbol.Insertar(32, 'Planificación semanal5');
+    Arbol.Insertar(71, 'Planificación semanal6');
+    Arbol.Insertar(13, 'Planificación semanal7');
+    Arbol.Insertar(48, 'Planificación semanal8');
+    Arbol.Insertar(92, 'Planificación semanal9');
+
+    WriteLn('Árbol B de orden 5 creado');
+
+    // Generar representación gráfica
+    Arbol.GraficarGraphviz;
+
+    // Ejemplo de búsqueda
+    WriteLn(#13#10'Ejemplo de búsqueda:');
+    Elemento := Arbol.Buscar(12);
+    if Elemento <> nil then
+      WriteLn(Format('Elemento encontrado - Id: %d, Asunto: %s', [Elemento.Id, Elemento.Asunto]))
+    else
+      WriteLn('Elemento no encontrado');
+
+    // Buscar un elemento que no existe
+    Elemento := Arbol.Buscar(99);
+    if Elemento <> nil then
+      WriteLn(Format('Elemento encontrado - Id: %d, Asunto: %s', [Elemento.Id, Elemento.Asunto]))
+    else
+      WriteLn('Elemento con Id 99 no encontrado');
+
+  finally
+    Arbol.Free;
+  end;
+
+  WriteLn('Presiona Enter para continuar...');
+  ReadLn;
+end.
