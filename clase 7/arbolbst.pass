@@ -1,0 +1,249 @@
+program arbolbst;
+
+uses crt;
+
+type
+  //Nodo
+  PTnode = ^Tnode;
+  Tnode = record
+    ID: Integer;
+    right: PTnode;
+    left: PTnode;
+  end;
+
+  //Arbol
+  Tree = class
+  private
+
+  public
+    root: PTnode;
+    connections: string;
+    nodes: string;
+
+    procedure recursive(curr: PTnode; newNode: PTnode);
+    procedure inOrderRecursive(curr: PTnode);
+    procedure preOrderRecursive(curr: PTnode);
+    procedure postOrderRecursive(curr: PTnode);
+
+    // Creacion
+    constructor Create;
+    procedure Agregar(id: Integer);
+
+    // Destructor
+    destructor Destroy; override;
+    procedure LiberarArbol(nodo: PTnode);
+
+    // Recorridos y busqueda
+    function Buscar(id: Integer): Boolean;
+    procedure RecorridoInOrder;
+    procedure RecorridoPreOrder;
+    procedure RecorridoPostOrder;
+  end;
+
+
+//  Creacion 
+constructor Tree.Create;
+begin
+  root := nil;
+  connections := '';
+  nodes := '';
+end;
+
+procedure Tree.Agregar(id: Integer);
+var
+  node: PTnode;
+begin
+  //Crear nodo
+  new(node);
+  node^.ID := id;
+  node^.right := nil;
+  node^.left := nil;
+
+  //Verificar que este vacio el arbol
+  if root = nil then
+  begin
+    root := node;
+  end
+  else
+  begin
+    recursive(root, node);
+  end;
+end;
+
+procedure Tree.recursive(curr: PTnode; newNode: PTnode);
+begin
+  //Realizar las verifiaciones
+
+  // Si es menor
+  if newNode^.ID < curr^.ID then
+  begin
+    // Si actual izquierda no esta libre
+    if curr^.left <> nil then
+    begin
+      recursive(curr^.left, newNode);
+    end
+    // si actual izqueirda esta libre se asigna el nodo
+    else
+    begin
+      curr^.left := newNode;
+    end;
+  end
+
+  // Si es mayor
+  else if newNode^.ID > curr^.ID then
+  begin
+    if curr^.right <> nil then
+    begin
+      recursive(curr^.right, newNode);
+    end
+    else
+    begin
+      curr^.right := newNode;
+    end;
+
+  end
+
+  // Si es igual (ya existe)
+  else
+  begin
+    // No se hace nada
+    Writeln('El valor ya esta en el arbol');
+    Dispose(newNode); /// Liberar memoria del nodo duplicado
+  end;
+end;
+
+//  Destructor
+destructor Tree.Destroy;
+begin
+  LiberarArbol(root);
+  inherited Destroy;
+end;
+
+procedure Tree.LiberarArbol(nodo: PTnode);
+begin
+  if nodo <> nil then
+  begin
+    LiberarArbol(nodo^.left);
+    LiberarArbol(nodo^.right);
+    Dispose(nodo);
+  end;
+end;
+
+function Tree.Buscar(id: Integer): Boolean;
+var
+  actual: PTnode;
+begin
+  actual := root;
+  while actual <> nil do
+  begin
+    if id = actual^.ID then
+      Exit(True)
+    else if id < actual^.ID then
+      actual := actual^.left
+    else
+      actual := actual^.right;
+  end;
+  Result := False;
+end;
+
+// Recorrido inOrden 
+procedure Tree.RecorridoInOrder;
+begin
+  inOrderRecursive(root);
+end;
+
+procedure Tree.inOrderRecursive(curr: PTnode);
+begin
+  if curr^.left <> nil then
+  begin
+       inOrderRecursive(curr^.left);
+  end;
+
+  // Mostrar nodo
+  writeln('Nodo: ', curr^.ID);
+
+  if curr^.right <> nil then
+  begin
+      inOrderRecursive(curr^.right);
+  end;
+end;
+
+// Recorrido PreOrden
+procedure Tree.RecorridoPreOrder;
+begin
+  preOrderRecursive(root);
+end;
+
+ 
+procedure Tree.preOrderRecursive(curr: PTnode);
+begin
+  // Mostrar nodo
+  writeln('Nodo: ', curr^.ID);
+
+  if curr^.left <> nil then
+  begin
+       preOrderRecursive(curr^.left);
+  end;
+
+
+  if curr^.right <> nil then
+  begin
+      preOrderRecursive(curr^.right);
+  end;
+end;
+
+//Recorrido PostOrden 
+procedure Tree.RecorridoPostOrder;
+begin
+  postOrderRecursive(root);
+end;
+
+
+procedure Tree.postOrderRecursive(curr: PTnode);
+begin
+
+
+  if curr^.left <> nil then
+  begin
+       postOrderRecursive(curr^.left);
+  end;
+
+
+  if curr^.right <> nil then
+  begin
+      postOrderRecursive(curr^.right);
+  end;
+
+  // Mostrar nodo
+  writeln('Nodo: ', curr^.ID);
+end;
+
+
+
+var
+   miArbol: Tree;
+begin
+    // Crear el árbol
+    miArbol := Tree.Create;
+
+    try
+      // Agregar elementos
+      miArbol.Agregar(50);
+      miArbol.Agregar(30);
+      miArbol.Agregar(70);
+      miArbol.Agregar(20);
+      miArbol.Agregar(40);
+      miArbol.Agregar(60);
+      miArbol.Agregar(80);
+
+      miArbol.Agregar(50); // Mostrará: "El valor ya está en el árbol"
+
+      miArbol.RecorridoPostOrder;
+
+      readkey;
+
+    finally
+      // miArbol.Destroy; //  implementar un destructor
+    end;
+  end.
+
