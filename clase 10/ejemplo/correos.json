@@ -1,0 +1,204 @@
+{
+  "correos": [
+    {
+      "id": 1,
+      "remitente": "lgarcia@edd.com",
+      "destinatario": "mitzep@edd.com",
+      "estado": "NL",
+      "asunto": "Reunión de proyecto",
+      "mensaje": "Confirmar asistencia a la reunión de equipo del lunes."
+    },
+    {
+      "id": 2,
+      "remitente": "lgarcia@edd.com",
+      "destinatario": "mitzep@edd.com",
+      "estado": "LEÍDO",
+      "asunto": "Reporte semanal",
+      "mensaje": "Adjunto el reporte semanal de actividades del área de desarrollo."
+    },
+    {
+      "id": 3,
+      "remitente": "mitzep@edd.com",
+      "destinatario": "gkroah-hartman@edd.com",
+      "estado": "NL",
+      "asunto": "Actualización de servidor",
+      "mensaje": "Se implementaron cambios importantes en el servidor. Por favor revisa los logs."
+    },
+    {
+      "id": 4,
+      "remitente": "gkroah-hartman@edd.com",
+      "destinatario": "mshuttleworth@edd.com",
+      "estado": "LEÍDO",
+      "asunto": "Nueva propuesta para el kernel",
+      "mensaje": "Te envío un borrador con la propuesta de mejora para revisión."
+    },
+    {
+      "id": 5,
+      "remitente": "mshuttleworth@edd.com",
+      "destinatario": "smejia@edd.com",
+      "estado": "NL",
+      "asunto": "Invitación a evento",
+      "mensaje": "Estás cordialmente invitado al evento de innovación tecnológica de este mes."
+    },
+    {
+      "id": 6,
+      "remitente": "smejia@edd.com",
+      "destinatario": "bfox@edd.com",
+      "estado": "LEÍDO",
+      "asunto": "Consulta sobre scripts",
+      "mensaje": "Tengo dudas con un script de automatización, ¿podrías ayudarme?"
+    },
+    {
+      "id": 7,
+      "remitente": "bfox@edd.com",
+      "destinatario": "jcorbet@edd.com",
+      "estado": "NL",
+      "asunto": "Documentación pendiente",
+      "mensaje": "Por favor completa la documentación técnica antes del viernes."
+    },
+    {
+      "id": 8,
+      "remitente": "jcorbet@edd.com",
+      "destinatario": "ksandler@edd.com",
+      "estado": "LEÍDO",
+      "asunto": "Revisión legal",
+      "mensaje": "Revisa los términos de uso del nuevo componente que vamos a integrar."
+    },
+    {
+      "id": 9,
+      "remitente": "ksandler@edd.com",
+      "destinatario": "mbaker@edd.com",
+      "estado": "ELIMINADO",
+      "asunto": "Problemas con licencias",
+      "mensaje": "Detectamos un problema con la licencia de un módulo, necesitamos resolverlo antes del lanzamiento."
+    },
+    {
+      "id": 10,
+      "remitente": "mbaker@edd.com",
+      "destinatario": "imurdock@edd.com",
+      "estado": "NL",
+      "asunto": "Reunión de coordinación",
+      "mensaje": "¿Puedes confirmar tu disponibilidad para la reunión del martes?"
+    },
+    {
+      "id": 11,
+      "remitente": "imurdock@edd.com",
+      "destinatario": "lgarcia@edd.com",
+      "estado": "LEÍDO",
+      "asunto": "Felicitaciones",
+      "mensaje": "Excelente trabajo en la implementación de la nueva funcionalidad."
+    },
+    {
+      "id": 12,
+      "remitente": "gkroah-hartman@edd.com",
+      "destinatario": "ksandler@edd.com",
+      "estado": "NL",
+      "asunto": "Colaboración en proyecto",
+      "mensaje": "¿Te interesaría colaborar en el desarrollo del módulo de seguridad?"
+    },
+    {
+      "id": 13,
+      "remitente": "mitzep@edd.com",
+      "destinatario": "smejia@edd.com",
+      "estado": "LEÍDO",
+      "asunto": "Entrega de informe",
+      "mensaje": "Te envío el informe técnico solicitado la semana pasada."
+    },
+    {
+      "id": 14,
+      "remitente": "smejia@edd.com",
+      "destinatario": "mitzep@edd.com",
+      "estado": "NL",
+      "asunto": "Re: Entrega de informe",
+      "mensaje": "Recibido, muchas gracias. Lo revisaré hoy mismo."
+    },
+    {
+      "id": 15,
+      "remitente": "mbaker@edd.com",
+      "destinatario": "gkroah-hartman@edd.com",
+      "estado": "NL",
+      "asunto": "Petición de revisión",
+      "mensaje": "¿Podrías revisar el módulo de red para la próxima versión?"
+    },
+    {
+      "id": 16,
+      "remitente": "lgarcia@edd.com",
+      "destinatario": "gkroah-hartman@edd.com",
+      "estado": "NL",
+      "asunto": "Recordatorio de reunión",
+      "mensaje": "No olvides la reunión de coordinación de esta tarde."
+    },
+    {
+      "id": 17,
+      "remitente": "mitzep@edd.com",
+      "destinatario": "mbaker@edd.com",
+      "estado": "LEÍDO",
+      "asunto": "Actualización de repositorio",
+      "mensaje": "Ya se hizo el push con la nueva versión. Por favor revisa y aprueba el merge."
+    },
+    {
+      "id": 18,
+      "remitente": "ksandler@edd.com",
+      "destinatario": "mshuttleworth@edd.com",
+      "estado": "NL",
+      "asunto": "Revisión de términos",
+      "mensaje": "Necesito tu aprobación sobre los cambios legales en el módulo de autenticación."
+    },
+    {
+      "id": 19,
+      "remitente": "gkroah-hartman@edd.com",
+      "destinatario": "bfox@edd.com",
+      "estado": "LEÍDO",
+      "asunto": "Pruebas de integración",
+      "mensaje": "Las pruebas automáticas fallaron en la última build. Revisa el reporte."
+    },
+    {
+      "id": 20,
+      "remitente": "bfox@edd.com",
+      "destinatario": "ksandler@edd.com",
+      "estado": "NL",
+      "asunto": "Dependencias externas",
+      "mensaje": "Necesitamos verificar las licencias de las nuevas librerías añadidas."
+    },
+    {
+      "id": 21,
+      "remitente": "jcorbet@edd.com",
+      "destinatario": "mitzep@edd.com",
+      "estado": "LEÍDO",
+      "asunto": "Artículo técnico",
+      "mensaje": "He publicado un artículo sobre el nuevo scheduler, te puede interesar."
+    },
+    {
+      "id": 22,
+      "remitente": "mbaker@edd.com",
+      "destinatario": "smejia@edd.com",
+      "estado": "NL",
+      "asunto": "Revisión de documentación",
+      "mensaje": "Por favor revisa la documentación antes de enviarla al cliente."
+    },
+    {
+      "id": 23,
+      "remitente": "smejia@edd.com",
+      "destinatario": "imurdock@edd.com",
+      "estado": "NL",
+      "asunto": "Solicitud de acceso",
+      "mensaje": "¿Podrías darme acceso al servidor de pruebas?"
+    },
+    {
+      "id": 24,
+      "remitente": "imurdock@edd.com",
+      "destinatario": "jcorbet@edd.com",
+      "estado": "LEÍDO",
+      "asunto": "Felicitaciones por la publicación",
+      "mensaje": "Leí tu último artículo, excelente trabajo."
+    },
+    {
+      "id": 25,
+      "remitente": "mshuttleworth@edd.com",
+      "destinatario": "lgarcia@edd.com",
+      "estado": "NL",
+      "asunto": "Actualización del roadmap",
+      "mensaje": "He actualizado el roadmap del proyecto. Revisa la sección de entregas."
+    }
+  ]
+}

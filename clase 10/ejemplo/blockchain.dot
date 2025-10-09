@@ -1,0 +1,24 @@
+digraph Blockchain {
+  node [shape=box, style=filled, color=lightblue];
+  Block0 [label="Index: 0\nTimestamp: 1758761678.031408\nUsuario: Genesis \nCorreo: genesis@block.com\nEdad: 0\nContraseña: \nNonce: 0\nHash: aae2dd611af476a...\nPrevHash: 0..."];
+  Block1 [label="Index: 1\nTimestamp: 1758761678.031408\nUsuario: Marcos Itzep\nCorreo: marcos.itzep@example.com\nEdad: 22\nContraseña: 5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5\nNonce: 0\nHash: a6b80577d5949c3...\nPrevHash: aae2dd611af476a..."];
+  Block0 -> Block1;
+  Block2 [label="Index: 2\nTimestamp: 1758761678.031408\nUsuario: Ana Lopez\nCorreo: ana.lopez@example.com\nEdad: 25\nContraseña: 92a0c6cca9228e10d04652f3244be224685e0e9dc0df6f67644d4df58f1d2925\nNonce: 0\nHash: 8b212fcccde487d...\nPrevHash: a6b80577d5949c3..."];
+  Block1 -> Block2;
+  Block3 [label="Index: 3\nTimestamp: 1758761678.031408\nUsuario: Carlos Ramirez\nCorreo: carlos.ramirez@example.com\nEdad: 30\nContraseña: 6ca13d52ca70c883e0f0bb101e425a89e8624de51db2d2392593af6a84118090\nNonce: 0\nHash: e972cd1879b7c3f...\nPrevHash: 8b212fcccde487d..."];
+  Block2 -> Block3;
+  Block4 [label="Index: 4\nTimestamp: 1758761678.031408\nUsuario: Lucia Gomez\nCorreo: lucia.gomez@example.com\nEdad: 27\nContraseña: 4b0bcb4895c1f6f066eb3a260a3950fe94695c45234d9048078b5b4a0574f0eb\nNonce: 0\nHash: 6bfd5fa20dcfcf9...\nPrevHash: e972cd1879b7c3f..."];
+  Block3 -> Block4;
+  Block5 [label="Index: 5\nTimestamp: 1758761678.031408\nUsuario: Pedro Martinez\nCorreo: pedro.martinez@example.com\nEdad: 35\nContraseña: ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f\nNonce: 0\nHash: f5af35a66fc0f70...\nPrevHash: 6bfd5fa20dcfcf9..."];
+  Block4 -> Block5;
+  Block6 [label="Index: 6\nTimestamp: 1758761678.031408\nUsuario: Sofia Hernandez\nCorreo: sofia.hernandez@example.com\nEdad: 29\nContraseña: 0817dfddc78d1b820494400874d7564af69645b59f423531692fcf91dd842115\nNonce: 0\nHash: 8fad170ff4ad397...\nPrevHash: f5af35a66fc0f70..."];
+  Block5 -> Block6;
+  Block7 [label="Index: 7\nTimestamp: 1758761678.031408\nUsuario: Miguel Torres\nCorreo: miguel.torres@example.com\nEdad: 40\nContraseña: 65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5\nNonce: 0\nHash: 61960d485996fcb...\nPrevHash: 8fad170ff4ad397..."];
+  Block6 -> Block7;
+  Block8 [label="Index: 8\nTimestamp: 1758761678.031408\nUsuario: Elena Diaz\nCorreo: elena.diaz@example.com\nEdad: 33\nContraseña: 0a1cb0e3ad6162abccee7638f45b15a63f8acbbb86285ea487bf6248720f58cc\nNonce: 0\nHash: 9165fd3d5c37c5e...\nPrevHash: 61960d485996fcb..."];
+  Block7 -> Block8;
+  Block9 [label="Index: 9\nTimestamp: 1758761678.031408\nUsuario: Jorge Castillo\nCorreo: jorge.castillo@example.com\nEdad: 28\nContraseña: 9afc0aaff2a3ea1728efb163f0256db82db0db02caa983f830e70d496fde97de\nNonce: 0\nHash: fbb45f65b1e7464...\nPrevHash: 9165fd3d5c37c5e..."];
+  Block8 -> Block9;
+  Block10 [label="Index: 10\nTimestamp: 1758761678.031408\nUsuario: Paola Mendez\nCorreo: paola.mendez@example.com\nEdad: 24\nContraseña: 80c67433920f30438f6efb03bcfa98c6e60137e877ff5835974a96e2516b6b86\nNonce: 0\nHash: 7508d1035bf8d3d...\nPrevHash: fbb45f65b1e7464..."];
+  Block9 -> Block10;
+}

@@ -1,0 +1,156 @@
+[
+    {
+        "Index": 0,
+        "Timestamp": 1758761678.031408,
+        "Usuario": {
+            "Nombres": "Genesis",
+            "Apellidos": "",
+            "Correo": "genesis@block.com",
+            "Edad": 0,
+            "Contrasenia": ""
+        },
+        "Nonce": 0,
+        "PreviousHash": "0",
+        "Hash": "aae2dd611af476a4886c7997c342bf9cd15da57811005bab45f60ab55becae61"
+    },
+    {
+        "Index": 1,
+        "Timestamp": 1758761678.031408,
+        "Usuario": {
+            "Nombres": "Marcos",
+            "Apellidos": "Itzep",
+            "Correo": "marcos.itzep@example.com",
+            "Edad": 22,
+            "Contrasenia": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5"
+        },
+        "Nonce": 0,
+        "PreviousHash": "aae2dd611af476a4886c7997c342bf9cd15da57811005bab45f60ab55becae61",
+        "Hash": "a6b80577d5949c31a9b4d649e649a93173c4630b834396abe8b0a8d299ed42d8"
+    },
+    {
+        "Index": 2,
+        "Timestamp": 1758761678.031408,
+        "Usuario": {
+            "Nombres": "Ana",
+            "Apellidos": "Lopez",
+            "Correo": "ana.lopez@example.com",
+            "Edad": 25,
+            "Contrasenia": "92a0c6cca9228e10d04652f3244be224685e0e9dc0df6f67644d4df58f1d2925"
+        },
+        "Nonce": 0,
+        "PreviousHash": "a6b80577d5949c31a9b4d649e649a93173c4630b834396abe8b0a8d299ed42d8",
+        "Hash": "8b212fcccde487d07d5faeaa4132f1d3fe5e68a4324798d21f2c8666f79df61c"
+    },
+    {
+        "Index": 3,
+        "Timestamp": 1758761678.031408,
+        "Usuario": {
+            "Nombres": "Carlos",
+            "Apellidos": "Ramirez",
+            "Correo": "carlos.ramirez@example.com",
+            "Edad": 30,
+            "Contrasenia": "6ca13d52ca70c883e0f0bb101e425a89e8624de51db2d2392593af6a84118090"
+        },
+        "Nonce": 0,
+        "PreviousHash": "8b212fcccde487d07d5faeaa4132f1d3fe5e68a4324798d21f2c8666f79df61c",
+        "Hash": "e972cd1879b7c3f271e0d0add6cd2884564060325c797ddc091f7f483302d5ad"
+    },
+    {
+        "Index": 4,
+        "Timestamp": 1758761678.031408,
+        "Usuario": {
+            "Nombres": "Lucia",
+            "Apellidos": "Gomez",
+            "Correo": "lucia.gomez@example.com",
+            "Edad": 27,
+            "Contrasenia": "4b0bcb4895c1f6f066eb3a260a3950fe94695c45234d9048078b5b4a0574f0eb"
+        },
+        "Nonce": 0,
+        "PreviousHash": "e972cd1879b7c3f271e0d0add6cd2884564060325c797ddc091f7f483302d5ad",
+        "Hash": "6bfd5fa20dcfcf9c60fc69cb04e246b7436447847441bd8eef244a86c6abcda2"
+    },
+    {
+        "Index": 5,
+        "Timestamp": 1758761678.031408,
+        "Usuario": {
+            "Nombres": "Pedro",
+            "Apellidos": "Martinez",
+            "Correo": "pedro.martinez@example.com",
+            "Edad": 35,
+            "Contrasenia": "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f"
+        },
+        "Nonce": 0,
+        "PreviousHash": "6bfd5fa20dcfcf9c60fc69cb04e246b7436447847441bd8eef244a86c6abcda2",
+        "Hash": "f5af35a66fc0f704fff081790c8e45ab4fd6f36f88e11e5f6851a4e08f018014"
+    },
+    {
+        "Index": 6,
+        "Timestamp": 1758761678.031408,
+        "Usuario": {
+            "Nombres": "Sofia",
+            "Apellidos": "Hernandez",
+            "Correo": "sofia.hernandez@example.com",
+            "Edad": 29,
+            "Contrasenia": "0817dfddc78d1b820494400874d7564af69645b59f423531692fcf91dd842115"
+        },
+        "Nonce": 0,
+        "PreviousHash": "f5af35a66fc0f704fff081790c8e45ab4fd6f36f88e11e5f6851a4e08f018014",
+        "Hash": "8fad170ff4ad3974487b9458f1612d85f977296f3aebd794829968870bbfef03"
+    },
+    {
+        "Index": 7,
+        "Timestamp": 1758761678.031408,
+        "Usuario": {
+            "Nombres": "Miguel",
+            "Apellidos": "Torres",
+            "Correo": "miguel.torres@example.com",
+            "Edad": 40,
+            "Contrasenia": "65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5"
+        },
+        "Nonce": 0,
+        "PreviousHash": "8fad170ff4ad3974487b9458f1612d85f977296f3aebd794829968870bbfef03",
+        "Hash": "61960d485996fcb0683319a2ef697835c57b40ee170b170d673a7c731681143f"
+    },
+    {
+        "Index": 8,
+        "Timestamp": 1758761678.031408,
+        "Usuario": {
+            "Nombres": "Elena",
+            "Apellidos": "Diaz",
+            "Correo": "elena.diaz@example.com",
+            "Edad": 33,
+            "Contrasenia": "0a1cb0e3ad6162abccee7638f45b15a63f8acbbb86285ea487bf6248720f58cc"
+        },
+        "Nonce": 0,
+        "PreviousHash": "61960d485996fcb0683319a2ef697835c57b40ee170b170d673a7c731681143f",
+        "Hash": "9165fd3d5c37c5e708edcd80b0e8a629135bf2456c2229c5145a17a27feb014b"
+    },
+    {
+        "Index": 9,
+        "Timestamp": 1758761678.031408,
+        "Usuario": {
+            "Nombres": "Jorge",
+            "Apellidos": "Castillo",
+            "Correo": "jorge.castillo@example.com",
+            "Edad": 28,
+            "Contrasenia": "9afc0aaff2a3ea1728efb163f0256db82db0db02caa983f830e70d496fde97de"
+        },
+        "Nonce": 0,
+        "PreviousHash": "9165fd3d5c37c5e708edcd80b0e8a629135bf2456c2229c5145a17a27feb014b",
+        "Hash": "fbb45f65b1e74645ed02ebe803db5073ff1746dafcf1009a71885aab42471362"
+    },
+    {
+        "Index": 10,
+        "Timestamp": 1758761678.031408,
+        "Usuario": {
+            "Nombres": "Paola",
+            "Apellidos": "Mendez",
+            "Correo": "paola.mendez@example.com",
+            "Edad": 24,
+            "Contrasenia": "80c67433920f30438f6efb03bcfa98c6e60137e877ff5835974a96e2516b6b86"
+        },
+        "Nonce": 0,
+        "PreviousHash": "fbb45f65b1e74645ed02ebe803db5073ff1746dafcf1009a71885aab42471362",
+        "Hash": "7508d1035bf8d3df1e5249f3eb23d025127eb8317e290d8026faef1837a9327f"
+    }
+]

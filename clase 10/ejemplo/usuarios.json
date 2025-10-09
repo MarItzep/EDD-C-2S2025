@@ -1,0 +1,72 @@
+[
+  {
+    "Nombres": "Marcos",
+    "Apellidos": "Itzep",
+    "Correo": "marcos.itzep@example.com",
+    "Edad": 22,
+    "Contrasenia": "12345"
+  },
+  {
+    "Nombres": "Ana",
+    "Apellidos": "Lopez",
+    "Correo": "ana.lopez@example.com",
+    "Edad": 25,
+    "Contrasenia": "mi_secreta"
+  },
+  {
+    "Nombres": "Carlos",
+    "Apellidos": "Ramirez",
+    "Correo": "carlos.ramirez@example.com",
+    "Edad": 30,
+    "Contrasenia": "abc123"
+  },
+  {
+    "Nombres": "Lucia",
+    "Apellidos": "Gomez",
+    "Correo": "lucia.gomez@example.com",
+    "Edad": 27,
+    "Contrasenia": "lucia2024"
+  },
+  {
+    "Nombres": "Pedro",
+    "Apellidos": "Martinez",
+    "Correo": "pedro.martinez@example.com",
+    "Edad": 35,
+    "Contrasenia": "password123"
+  },
+  {
+    "Nombres": "Sofia",
+    "Apellidos": "Hernandez",
+    "Correo": "sofia.hernandez@example.com",
+    "Edad": 29,
+    "Contrasenia": "sofia_pass"
+  },
+  {
+    "Nombres": "Miguel",
+    "Apellidos": "Torres",
+    "Correo": "miguel.torres@example.com",
+    "Edad": 40,
+    "Contrasenia": "qwerty"
+  },
+  {
+    "Nombres": "Elena",
+    "Apellidos": "Diaz",
+    "Correo": "elena.diaz@example.com",
+    "Edad": 33,
+    "Contrasenia": "elena123"
+  },
+  {
+    "Nombres": "Jorge",
+    "Apellidos": "Castillo",
+    "Correo": "jorge.castillo@example.com",
+    "Edad": 28,
+    "Contrasenia": "jorgePass"
+  },
+  {
+    "Nombres": "Paola",
+    "Apellidos": "Mendez",
+    "Correo": "paola.mendez@example.com",
+    "Edad": 24,
+    "Contrasenia": "paola2025"
+  }
+]

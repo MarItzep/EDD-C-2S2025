@@ -1,0 +1,18 @@
+digraph MerkleTree {
+  node [shape=record];
+  graph [rankdir=TB];
+  subgraph cluster_0 {
+    label="Privados";
+  node0 [label="Hash: 417aad8a..."];
+  node1 [label="Hash: 3c1a6ef7..."];
+  node2 [label="De: juan@edd.com\nAsunto: ReuniÃ³n\nFecha: 2025-09-26\nHash: dee04062..."];
+  node1 -> node2;
+  node3 [label="De: maria@edd.com\nAsunto: Entrega de proyecto\nFecha: 2025-09-25\nHash: 511f15da..."];
+  node1 -> node3;
+  node0 -> node1;
+  node4 [label="Hash: 81b77e45..."];
+  node5 [label="De: carlos@edd.com\nAsunto: Aviso\nFecha: 2025-09-24\nHash: 775bf4c0..."];
+  node4 -> node5;
+  node0 -> node4;
+  }
+}
