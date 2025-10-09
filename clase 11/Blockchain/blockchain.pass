@@ -1,0 +1,223 @@
+program blockchainCorreos;
+
+uses
+  Classes, SysUtils, fpjson, jsonparser, sha1;
+
+/// clase de correo
+type
+  TCorreo = class
+  public
+    Id: Integer;
+    Asunto: string;
+    constructor Create(AId: Integer; AAsunto: string);
+  end;
+
+constructor TCorreo.Create(AId: Integer; AAsunto: string);
+begin
+  Id := AId;
+  Asunto := AAsunto;
+end;
+
+// sha 256
+function HashString(const Texto: string): string;
+var
+  JSON: TJSONObject;
+  Digest: TSHA1Digest;
+  i: Integer;
+begin
+  JSON := TJSONObject.Create;
+  try
+    JSON.Add('Data', Texto);
+    Digest := SHA1String(JSON.AsJSON);
+    Result := '';
+    for i := 0 to High(Digest) do
+      Result := Result + LowerCase(IntToHex(Digest[i], 2));
+  finally
+    JSON.Free;
+  end;
+end;
+
+/// clase bloque general
+type
+  TBloque = class
+  public
+    Index: Integer;
+    Timestamp: TDateTime;
+    Data: TCorreo;
+    PreviousHash: string;
+    Nonce: Integer;
+    Hash: string;
+    constructor Create(AIndex: Integer; AData: TCorreo; APrevHash: string);
+    function CalcularHash: string;
+    procedure Minar(Dificultad: Integer);
+  end;
+
+constructor TBloque.Create(AIndex: Integer; AData: TCorreo; APrevHash: string);
+begin
+  Index := AIndex;
+  Timestamp := Now;
+  Data := AData;
+  PreviousHash := APrevHash;
+  Nonce := 0;
+  Hash := CalcularHash;
+end;
+
+function TBloque.CalcularHash: string;
+var
+  InputStr: string;
+begin
+  InputStr := IntToStr(Index) + DateTimeToStr(Timestamp) +
+              IntToStr(Data.Id) + Data.Asunto +
+              IntToStr(Nonce) + PreviousHash;
+  Result := HashString(InputStr);
+end;
+
+// Prueba de trabajo: iterar Nonce hasta cumplir dificultad (hash empieza con N ceros)
+procedure TBloque.Minar(Dificultad: Integer);
+var
+  Prefijo: string;
+begin
+  Prefijo := StringOfChar('0', Dificultad);
+  Nonce := 0;
+  Hash := CalcularHash;
+  while Copy(Hash, 1, Dificultad) <> Prefijo do
+  begin
+    Inc(Nonce);
+    Hash := CalcularHash;
+  end;
+end;
+
+/// CLASE BLOCKCHAIN
+type
+  TBlockchain = class
+  private
+    FChain: TList;
+    function GetUltimoBloque: TBloque;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure AgregarBloque(AData: TCorreo);
+    procedure MostrarCadena;
+    function GenerarDOT: string;
+  end;
+
+/// generar DOT
+function TBlockchain.GenerarDOT: string;
+var
+  I: Integer;
+  Bloque: TBloque;
+  DOT: TStringList;
+  HashShort, PrevHashShort: string;
+begin
+  DOT := TStringList.Create;
+  try
+    DOT.Add('digraph Blockchain {');
+    DOT.Add('  node [shape=box, style=filled, color=lightblue];');
+
+    // Definir nodos
+    for I := 0 to FChain.Count - 1 do
+    begin
+      Bloque := TBloque(FChain[I]);
+      HashShort := Copy(Bloque.Hash, 1, 15) + '...';
+      PrevHashShort := Copy(Bloque.PreviousHash, 1, 15) + '...';
+
+      DOT.Add(Format(
+        '  Block%d [label="Index: %d\nTimestamp: %s\nId Correo: %d\nAsunto: %s\nNonce: %d\nHash: %s\nPrevHash: %s"];',
+        [Bloque.Index, Bloque.Index, FloatToStr(Bloque.Timestamp),
+         Bloque.Data.Id, Bloque.Data.Asunto, Bloque.Nonce, HashShort, PrevHashShort]
+      ));
+    end;
+
+    // Enlaces entre bloques
+    for I := 1 to FChain.Count - 1 do
+      DOT.Add(Format('  Block%d -> Block%d;', [I-1, I]));
+
+    DOT.Add('}');
+    Result := DOT.Text;
+  finally
+    DOT.Free;
+  end;
+end;
+
+constructor TBlockchain.Create;
+var
+  GenesisCorreo: TCorreo;
+  GenesisBlock: TBloque;
+begin
+  FChain := TList.Create;
+  GenesisCorreo := TCorreo.Create(0, 'Genesis Block');
+  GenesisBlock := TBloque.Create(0, GenesisCorreo, '0');
+  FChain.Add(GenesisBlock);
+end;
+
+destructor TBlockchain.Destroy;
+var
+  I: Integer;
+begin
+  for I := 0 to FChain.Count - 1 do
+    TObject(FChain[I]).Free;
+  FChain.Free;
+  inherited;
+end;
+
+function TBlockchain.GetUltimoBloque: TBloque;
+begin
+  Result := TBloque(FChain[FChain.Count - 1]);
+end;
+
+procedure TBlockchain.AgregarBloque(AData: TCorreo);
+var
+  Ultimo: TBloque;
+  Nuevo: TBloque;
+begin
+  Ultimo := GetUltimoBloque;
+  Nuevo := TBloque.Create(FChain.Count, AData, Ultimo.Hash);
+  Nuevo.Minar(4); // Dificultad 4: hash inicia con 4 ceros
+  FChain.Add(Nuevo);
+end;
+
+procedure TBlockchain.MostrarCadena;
+var
+  I: Integer;
+  Bloque: TBloque;
+begin
+  for I := 0 to FChain.Count - 1 do
+  begin
+    Bloque := TBloque(FChain[I]);
+    Writeln('------- BLOQUE -------');
+    Writeln('Index: ', Bloque.Index);
+    Writeln('Timestamp: ', DateTimeToStr(Bloque.Timestamp));
+    Writeln('Id Correo: ', Bloque.Data.Id);
+    Writeln('Asunto: ', Bloque.Data.Asunto);
+    Writeln('Nonce: ', Bloque.Nonce);
+    Writeln('Hash: ', Bloque.Hash);
+    Writeln('PrevHash: ', Bloque.PreviousHash);
+    Writeln;
+  end;
+end;
+
+/// MAIN PRINCIPAL
+var
+  Blockchain: TBlockchain;
+  DOTCode: string;
+begin
+  Blockchain := TBlockchain.Create;
+  try
+    // Insertar correos automáticamente al ejecutar
+    Blockchain.AgregarBloque(TCorreo.Create(1, 'Reunión'));
+    Blockchain.AgregarBloque(TCorreo.Create(2, 'Entrega de proyecto'));
+    Blockchain.AgregarBloque(TCorreo.Create(3, 'Aviso importante'));
+    Blockchain.AgregarBloque(TCorreo.Create(4, 'Recordatorio de pago'));
+    Blockchain.AgregarBloque(TCorreo.Create(5, 'Actualización de sistema'));
+
+    // Mostrar la blockchain completa
+    Blockchain.MostrarCadena;
+
+    // Generar DOT
+    DOTCode := Blockchain.GenerarDOT;
+    WriteLn(DOTCode);
+    ReadLn;
+  finally
+    Blockchain.Free;
+  end;
+end.

@@ -1,0 +1,187 @@
+program grafos;
+
+uses
+  crt, Classes, SysUtils;
+
+type
+  // Nodo del grafo
+  PNodoGrafo = ^TNodoGrafo;
+  TNodoGrafo = record
+    valor: string;
+    siguiente: PNodoGrafo;
+  end;
+
+  // Conexión entre nodos
+  edge = record
+    origen: PNodoGrafo;
+    destino: PNodoGrafo;
+  end;
+
+  // Clase Grafo
+  Grafo = class
+  private
+  public
+    root: PNodoGrafo;
+    conexionesID: integer;
+    conexiones: array of edge;
+
+    constructor Create;
+    procedure crearNodo(valor: string);
+    procedure crearConexion(origen: string; destino: string);
+    function buscarNodo(valor: string): PNodoGrafo;
+    procedure RecorrerGrafo;
+    function GenerarDOT: string;
+  end;
+
+// implementacion y creacion del grafo
+
+constructor Grafo.Create;
+begin
+  root := nil;
+  conexionesID := 0;
+  SetLength(conexiones, 100);
+end;
+
+procedure Grafo.crearNodo(valor: string);
+var
+  nuevoNodo, actual: PNodoGrafo;
+begin
+  new(nuevoNodo);
+  nuevoNodo^.valor := valor;
+  nuevoNodo^.siguiente := nil;
+
+  if root = nil then
+    root := nuevoNodo
+  else
+  begin
+    actual := root;
+    while actual^.siguiente <> nil do
+      actual := actual^.siguiente;
+    actual^.siguiente := nuevoNodo;
+  end;
+end;
+
+procedure Grafo.crearConexion(origen: string; destino: string);
+var
+  nodoInicio, nodoDestino: PNodoGrafo;
+  conexion: edge;
+begin
+  nodoInicio := buscarNodo(origen);
+  nodoDestino := buscarNodo(destino);
+
+  if (nodoInicio = nil) or (nodoDestino = nil) then
+  begin
+    Writeln('Nodo inicio o destino no existe');
+    Exit;
+  end;
+
+  conexion.origen := nodoInicio;
+  conexion.destino := nodoDestino;
+  conexiones[conexionesID] := conexion;
+  Inc(conexionesID);
+end;
+
+function Grafo.buscarNodo(valor: string): PNodoGrafo;
+var
+  actual: PNodoGrafo;
+begin
+  actual := root;
+  while actual <> nil do
+  begin
+    if actual^.valor = valor then
+      Exit(actual);
+    actual := actual^.siguiente;
+  end;
+  Exit(nil);
+end;
+
+procedure Grafo.RecorrerGrafo;
+var
+  actual: PNodoGrafo;
+  i: integer;
+begin
+  Writeln('--- NODOS ---');
+  actual := root;
+  while actual <> nil do
+  begin
+    Writeln('Valor del nodo: ', actual^.valor);
+    actual := actual^.siguiente;
+  end;
+
+  Writeln('--- CONEXIONES ---');
+  for i := 0 to conexionesID - 1 do
+    Writeln('Conexion: ', conexiones[i].origen^.valor, ' -> ', conexiones[i].destino^.valor);
+end;
+
+function Grafo.GenerarDOT: string;
+var
+  DOT: TStringList;
+  actual: PNodoGrafo;
+  i: Integer;
+begin
+  DOT := TStringList.Create;
+  try
+    DOT.Add('digraph G {');
+    DOT.Add('  node [shape=ellipse, style=filled, color=lightgreen];');
+
+    // Agregar nodos
+    actual := root;
+    while actual <> nil do
+    begin
+      DOT.Add(Format('  %s [label="%s"];', [actual^.valor, actual^.valor]));
+      actual := actual^.siguiente;
+    end;
+
+    // Agregar conexiones
+    for i := 0 to conexionesID - 1 do
+      DOT.Add(Format('  %s -> %s;', [conexiones[i].origen^.valor, conexiones[i].destino^.valor]));
+
+    DOT.Add('}');
+    Result := DOT.Text;
+  finally
+    DOT.Free;
+  end;
+end;
+
+// programa principal
+
+var
+  miGrafo: Grafo;
+  dotCode: string;
+
+begin
+  miGrafo := Grafo.Create;
+  try
+    // Crear nodos
+    miGrafo.crearNodo('A');
+    miGrafo.crearNodo('B');
+    miGrafo.crearNodo('C');
+    miGrafo.crearNodo('D');
+    miGrafo.crearNodo('G');
+
+    // Crear conexiones
+    /// funcion o metodo donde filtro usuarios - json (contactos --- usuario (cada usuario va tener sus contactos)
+    /// metodounificarUsuarios (filtrar cada usuario e ir guardando - validar que si un usuario tiene los mismos contactos )
+    // crear nodods de usuarios y contactos
+    /// crear conexiones
+
+    miGrafo.crearConexion('A', 'B');
+    miGrafo.crearConexion('A', 'G');
+    miGrafo.crearConexion('B', 'D');
+    miGrafo.crearConexion('B', 'C');
+    miGrafo.crearConexion('G', 'D');
+
+    // Mostrar nodos y conexiones por consola
+    miGrafo.RecorrerGrafo;
+
+    // Generar código DOT
+    dotCode := miGrafo.GenerarDOT;
+    Writeln;
+    Writeln('--- CÓDIGO DOT ---');
+    Writeln(dotCode);
+
+    ReadKey;
+  finally
+    // Liberar memoria (opcional, aquí los nodos no se liberan manualmente)
+  end;
+end.

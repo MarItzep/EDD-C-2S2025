@@ -1,0 +1,15 @@
+
+digraph Blockchain {
+  node [shape=box, style=filled, color=lightblue];
+  Block0 [label="Index: 0\nTimestamp: 45938.8137673148\nId Correo: 0\nAsunto: Genesis Block\nNonce: 0\nHash: a68c7ec53071555...\nPrevHash: 0..."];
+  Block1 [label="Index: 1\nTimestamp: 45938.8137673148\nId Correo: 1\nAsunto: ReuniÃ³n\nNonce: 12288\nHash: 0000230999ac0c3...\nPrevHash: a68c7ec53071555..."];
+  Block2 [label="Index: 2\nTimestamp: 45938.8137698843\nId Correo: 2\nAsunto: Entrega de proyecto\nNonce: 107447\nHash: 0000161421077da...\nPrevHash: 0000230999ac0c3..."];
+  Block3 [label="Index: 3\nTimestamp: 45938.8137858565\nId Correo: 3\nAsunto: Aviso importante\nNonce: 55020\nHash: 00000f30629951c...\nPrevHash: 0000161421077da..."];
+  Block4 [label="Index: 4\nTimestamp: 45938.8137935301\nId Correo: 4\nAsunto: Recordatorio de pago\nNonce: 18876\nHash: 00009bbf6dccdfd...\nPrevHash: 00000f30629951c..."];
+  Block5 [label="Index: 5\nTimestamp: 45938.8137963657\nId Correo: 5\nAsunto: ActualizaciÃ³n de sistema\nNonce: 46644\nHash: 00001d0a1dbf654...\nPrevHash: 00009bbf6dccdfd..."];
+  Block0 -> Block1;
+  Block1 -> Block2;
+  Block2 -> Block3;
+  Block3 -> Block4;
+  Block4 -> Block5;
+}

@@ -1,0 +1,15 @@
+
+digraph G {
+  node [shape=ellipse, style=filled, color=lightgreen];
+  A [label="A"];
+  B [label="B"];
+  C [label="C"];
+  D [label="D"];
+  G [label="G"];
+  A -> B;
+  A -> G;
+  B -> D;
+  B -> C;
+  G -> D;
+}
+
