@@ -1,0 +1,34 @@
+digraph MerkleTree {
+  node [shape=record];
+  graph [rankdir=TB];
+  subgraph cluster_0 {
+    label="Favoritos";
+  node0 [label="Hash: ed6d205b..."];
+  node1 [label="Hash: 3c315d43..."];
+  node2 [label="Hash: c676b9a6..."];
+  node3 [label="De: juan@edd.com\nAsunto: Reunion\nFecha: 2025-09-26\nHash: d62663d4..."];
+  node2 -> node3;
+  node4 [label="De: maria@edd.com\nAsunto: Entrega de proyecto\nFecha: 2025-09-25\nHash: 511f15da..."];
+  node2 -> node4;
+  node1 -> node2;
+  node5 [label="Hash: eb30f195..."];
+  node6 [label="De: carlos@edd.com\nAsunto: Aviso\nFecha: 2025-09-24\nHash: 775bf4c0..."];
+  node5 -> node6;
+  node7 [label="De: pedro@edd.com\nAsunto: Aviso1\nFecha: 2025-09-24\nHash: 99143acb..."];
+  node5 -> node7;
+  node1 -> node5;
+  node0 -> node1;
+  node8 [label="Hash: 2fe230e2..."];
+  node9 [label="Hash: e046ba63..."];
+  node10 [label="De: andrea@edd.com\nAsunto: Aviso2\nFecha: 2025-09-24\nHash: 2446cce5..."];
+  node9 -> node10;
+  node11 [label="De: josue@edd.com\nAsunto: Aviso3\nFecha: 2025-09-24\nHash: 241dfb09..."];
+  node9 -> node11;
+  node8 -> node9;
+  node12 [label="Hash: 8109dbfb..."];
+  node13 [label="De: rodrigo@edd.com\nAsunto: Aviso4\nFecha: 2025-09-24\nHash: a8fc8175..."];
+  node12 -> node13;
+  node8 -> node12;
+  node0 -> node8;
+  }
+}

@@ -1,0 +1,292 @@
+program merklefavoritos;
+
+{$mode objfpc}{$H+}
+{$APPTYPE CONSOLE}
+
+uses
+  Classes, SysUtils, fpjson, jsonparser, sha1;
+
+type
+  { Clase Favorito }
+  //
+  TFavorito = class
+  public
+    Remitente: String;
+    Asunto: String;
+    Fecha: String;
+    Mensaje: String;
+
+    constructor Create(ARemitente, AAsunto, AFecha, AMensaje: String);
+    function GetHash: String;
+  end;
+
+  { -------- Nodo del árbol Merkle -------- }
+  TMerkleNode = class
+  public
+    Hash: String;
+    Left, Right: TMerkleNode;
+    Favorito: TFavorito;
+
+    constructor CreateLeaf(AFavorito: TFavorito); overload;
+    constructor CreateInternal(ALeft, ARight: TMerkleNode); overload;
+  private
+    function CalculateHash(const LeftHash, RightHash: String): String;
+  end;
+
+  { Árbol Merkle}
+  TMerkleTree = class
+  private
+    Leaves: TList;   // lista de nodos hoja
+    Root: TMerkleNode;
+
+    procedure BuildTree;
+    procedure GenerateDotRecursive(Node: TMerkleNode; var SL: TStringList; var IdCounter: Integer);
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    procedure Insert(ARemitente, AAsunto, AFecha, AMensaje: String);
+    function GenerateDot: String;
+  end;
+
+{Implementación Favorito} constructor TFavorito.Create(ARemitente, AAsunto, AFecha, AMensaje: String);
+begin
+  // Inicializa un objeto Favorito con la información proporcionada
+  Remitente := ARemitente;
+  Asunto := AAsunto;
+  Fecha := AFecha;
+  Mensaje := AMensaje;
+end;
+
+function TFavorito.GetHash: String;
+var
+  JSON: TJSONObject;
+  Data: String;
+  Digest: TSHA1Digest;
+  i: Integer;
+begin
+  // 1. Crear un JSON con los atributos del Favorito
+  JSON := TJSONObject.Create;
+  try
+    JSON.Add('Remitente', Remitente);
+    JSON.Add('Asunto', Asunto);
+    JSON.Add('Fecha', Fecha);
+    JSON.Add('Mensaje', Mensaje);
+    Data := JSON.AsJSON; // Convertir JSON a cadena
+  finally
+    JSON.Free;
+  end;
+
+  // 2. Calcular el hash SHA-1 de la cadena JSON
+  Digest := SHA1String(Data);
+
+  // 3. Convertir el hash binario a formato hexadecimal
+  Result := '';
+  for i := 0 to High(Digest) do
+    Result := Result + LowerCase(IntToHex(Digest[i], 2));
+end;
+
+
+{Implementación MerkleNode}
+constructor TMerkleNode.CreateLeaf(AFavorito: TFavorito);
+begin
+  // Crea un nodo hoja que representa un Favorito
+  Favorito := AFavorito;       // Guarda el Favorito en el nodo
+  Hash := Favorito.GetHash;    // Calcula el hash del Favorito
+  Left := nil;
+  Right := nil;
+end;
+
+constructor TMerkleNode.CreateInternal(ALeft, ARight: TMerkleNode);
+begin
+  // Crea un nodo interno a partir de dos nodos hijos
+  Favorito := nil;              // Nodo interno no tiene Favorito
+  Left := ALeft;
+  Right := ARight;
+
+  // Calcular hash del nodo interno combinando los hashes de los hijos
+  if Assigned(ARight) then
+    Hash := CalculateHash(ALeft.Hash, ARight.Hash)
+  else
+    Hash := CalculateHash(ALeft.Hash, ALeft.Hash); // Si solo hay hijo izquierdo, se duplica
+end;
+
+function TMerkleNode.CalculateHash(const LeftHash, RightHash: String): String;
+var
+  Combined: String;
+  Digest: TSHA1Digest;
+  i: Integer;
+begin
+  // 1. Concatenar los hashes de los hijos
+  Combined := LeftHash + RightHash;
+
+  // 2. Calcular SHA-1 del hash combinado
+  Digest := SHA1String(Combined);
+
+  // 3. Convertir hash binario a hexadecimal
+  Result := '';
+  for i := 0 to High(Digest) do
+    Result := Result + LowerCase(IntToHex(Digest[i], 2));
+end;
+
+
+{Implementación MerkleTree}
+constructor TMerkleTree.Create;
+begin
+  Leaves := TList.Create; // Lista para almacenar nodos hoja
+  Root := nil;            // Inicialmente no hay raíz
+end;
+
+destructor TMerkleTree.Destroy;
+begin
+  Leaves.Free;            // Liberar memoria de hojas
+  inherited Destroy;
+end;
+
+procedure TMerkleTree.Insert(ARemitente, AAsunto, AFecha, AMensaje: String);
+var
+  Leaf: TMerkleNode;
+  Fav: TFavorito;
+begin
+  // 1. Crear un nuevo Favorito
+  Fav := TFavorito.Create(ARemitente, AAsunto, AFecha, AMensaje);
+
+  // 2. Crear un nodo hoja con ese Favorito
+  Leaf := TMerkleNode.CreateLeaf(Fav);
+
+  // 3. Agregar la hoja a la lista
+  Leaves.Add(Leaf);
+
+  // 4. Reconstruir todo el árbol Merkle
+  BuildTree;
+end;
+
+procedure TMerkleTree.BuildTree;
+var
+  CurrentLevel, NextLevel: TList;
+  i: Integer;
+  Left, Right, Parent: TMerkleNode;
+begin
+  // Si no hay hojas, el árbol queda vacío
+  if Leaves.Count = 0 then
+  begin
+    Root := nil;
+    Exit;
+  end;
+
+  CurrentLevel := TList.Create;
+  try
+    CurrentLevel.Assign(Leaves); // Nivel inicial = hojas
+
+    // Construir niveles superiores hasta la raíz
+    while CurrentLevel.Count > 1 do
+    begin
+      NextLevel := TList.Create;
+      for i := 0 to CurrentLevel.Count - 1 do
+      begin
+        if i mod 2 = 0 then
+        begin
+          Left := TMerkleNode(CurrentLevel[i]);
+          if i + 1 < CurrentLevel.Count then
+            Right := TMerkleNode(CurrentLevel[i+1])
+          else
+            Right := nil;
+          Parent := TMerkleNode.CreateInternal(Left, Right); // Nodo padre
+          NextLevel.Add(Parent);
+        end;
+      end;
+      CurrentLevel.Free;
+      CurrentLevel := NextLevel;
+    end;
+
+    Root := TMerkleNode(CurrentLevel[0]); // Nodo raíz final
+  finally
+    CurrentLevel.Free;
+  end;
+end;
+
+procedure TMerkleTree.GenerateDotRecursive(Node: TMerkleNode; var SL: TStringList; var IdCounter: Integer);
+var
+  NodeId, LeftId, RightId: Integer;
+  LabelText: String;
+begin
+  if Node = nil then Exit;
+
+  NodeId := IdCounter;
+  Inc(IdCounter);
+
+  // Crear etiqueta para el nodo (Favorito o nodo interno)
+  if Assigned(Node.Favorito) then
+    LabelText := Format('"De: %s\nAsunto: %s\nFecha: %s\nHash: %s..."',
+      [Node.Favorito.Remitente, Node.Favorito.Asunto, Node.Favorito.Fecha, Copy(Node.Hash, 1, 8)])
+  else
+    LabelText := Format('"Hash: %s..."', [Copy(Node.Hash, 1, 8)]);
+
+  SL.Add(Format('  node%d [label=%s];', [NodeId, LabelText]));
+
+  // Generar recursivamente nodos hijos
+  if Assigned(Node.Left) then
+  begin
+    LeftId := IdCounter;
+    GenerateDotRecursive(Node.Left, SL, IdCounter);
+    SL.Add(Format('  node%d -> node%d;', [NodeId, LeftId]));
+  end;
+
+  if Assigned(Node.Right) then
+  begin
+    RightId := IdCounter;
+    GenerateDotRecursive(Node.Right, SL, IdCounter);
+    SL.Add(Format('  node%d -> node%d;', [NodeId, RightId]));
+  end;
+end;
+
+function TMerkleTree.GenerateDot: String;
+var
+  SL: TStringList;
+  Counter: Integer;
+begin
+  SL := TStringList.Create;
+  try
+    SL.Add('digraph MerkleTree {');
+    SL.Add('  node [shape=record];');
+    SL.Add('  graph [rankdir=TB];');
+    SL.Add('  subgraph cluster_0 {');
+    SL.Add('    label="Favoritos";');
+
+    // Si el árbol está vacío
+    if Root = nil then
+      SL.Add('    empty [label="Árbol vacío"];')
+    else
+    begin
+      Counter := 0;
+      GenerateDotRecursive(Root, SL, Counter); // Generar nodos recursivamente
+    end;
+
+    SL.Add('  }');
+    SL.Add('}');
+    Result := SL.Text; // Devolver string DOT completo
+  finally
+    SL.Free;
+  end;
+end;
+
+
+{Programa principal}
+var
+  Tree: TMerkleTree;
+begin
+  Tree := TMerkleTree.Create;
+  try
+    Tree.Insert('juan@edd.com', 'Reunion', '2025-09-26', 'La reunion sera mañana a las 10 AM.');
+    Tree.Insert('maria@edd.com', 'Entrega de proyecto', '2025-09-25', 'El proyecto final se entrega el viernes.');
+    Tree.Insert('carlos@edd.com', 'Aviso', '2025-09-24', 'Recuerda revisar los documentos adjuntos.');
+    Tree.Insert('pedro@edd.com', 'Aviso1', '2025-09-24', 'Recuerda revisar los documentos adjuntos1.');
+    Tree.Insert('andrea@edd.com', 'Aviso2', '2025-09-24', 'Recuerda revisar los documentos adjuntos2.');
+    Tree.Insert('josue@edd.com', 'Aviso3', '2025-09-24', 'Recuerda revisar los documentos adjuntos3.');
+    Tree.Insert('rodrigo@edd.com', 'Aviso4', '2025-09-24', 'Recuerda revisar los documentos adjuntos4.');
+    WriteLn(Tree.GenerateDot);
+    ReadLn();
+  finally
+    Tree.Free;
+  end;
+end.
