@@ -1,0 +1,25 @@
+{
+  "users": [
+    {
+      "username": "marcos",
+      "password": "12345",
+      "fullName": "Marcos Itzep",
+      "email": "marcos@demo.com",
+      "profile": { "age": 25, "bio": "Ingeniero de software" },
+      "pets": [
+        { "name": "Luna", "species": "Perro", "age": 3 },
+        { "name": "Michi", "species": "Gato", "age": 2 }
+      ]
+    },
+    {
+      "username": "ana",
+      "password": "abc123",
+      "fullName": "Ana García",
+      "email": "ana@demo.com",
+      "profile": { "age": 30, "bio": "Amante de los animales" },
+      "pets": [
+        { "name": "Rex", "species": "Perro", "age": 5 }
+      ]
+    }
+  ]
+}
